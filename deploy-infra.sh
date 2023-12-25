@@ -20,6 +20,7 @@ echo "\n\n=========== Deploying setup.yml ==========="
 aws cloudformation deploy \
   --region $REGION \
   --profile $CLI_PROFILE \
+  
   --stack-name $STACK_NAME-setup \
   --template-file setup.yml \
   --no-fail-on-empty-changeset \
