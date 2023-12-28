@@ -249,7 +249,7 @@ Resources:
 
             # Create log directory
             mkdir -p /home/ec2-user/app/logs
-
+            npm --version
             # Run server
             cd app
             npm install
