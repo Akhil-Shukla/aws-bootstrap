@@ -3,20 +3,31 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      nodejs: 10
+      python: 3.8
   pre_build:
     commands:
-      # run 'npm install' using versions in package-lock.json
-      - npm install
-      - npm ci
+      - echo Logging in to Amazon ECR...
+      - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
   build:
     commands:
-      - npm run build
+      - echo Build started on `date`
+      - echo Building the Docker image...
+      - docker build -t $REPOSITORY_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION .
+      - docker tag $REPOSITORY_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION $REPOSITORY_URI:latest
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker images...
+      - docker push $REPOSITORY_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION
+      - docker push $REPOSITORY_URI:latest
 artifacts:
   files:
-    - start-service.sh
-    - stop-service.sh
-    - server.js
-    - package.json
+    # - start-service.sh
+    # - stop-service.sh
+    # - server.js
+    # - package.json
+    - 'myproject/**'
+    - 'Dockerfile'
+    - 'manage.py'
     - appspec.yml
-    - 'node_modules/**/*'
+    - 'requirements.txt'

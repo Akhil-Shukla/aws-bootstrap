@@ -27,7 +27,6 @@ Parameters:
 
 
 Resources:
-
   SecurityGroup:
     Type: "AWS::EC2::SecurityGroup"
     Properties:
